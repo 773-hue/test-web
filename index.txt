@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今天吃什麼？抽籤器</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: linear-gradient(135deg, #fff1dc, #ffd6cc);
+      color: #44352f;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      padding: 32px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 12px 35px rgba(100, 60, 40, 0.12);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      color: #e87542;
+    }
+
+    .subtitle {
+      color: #888;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 14px;
+      border: 2px solid #f1d9ca;
+      border-radius: 12px;
+      font-size: 16px;
+      line-height: 1.8;
+      resize: vertical;
+      outline: none;
+      font-family: inherit;
+    }
+
+    textarea:focus {
+      border-color: #ed986e;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #ed8252;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #dc693b;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .result-box {
+      margin-top: 25px;
+      padding: 25px 15px;
+      border-radius: 16px;
+      background: #fff5eb;
+      border: 2px dashed #f2bd9c;
+    }
+
+    .result-title {
+      color: #aa8069;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    #result {
+      font-size: 32px;
+      font-weight: bold;
+      color: #e87542;
+      min-height: 45px;
+      overflow-wrap: anywhere;
+    }
+
+    #message {
+      margin-top: 12px;
+      color: #d94c40;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .hint {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #999;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 24px 18px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+    <h1>🍜 今天吃什麼？</h1>
+
+    <p class="subtitle">
+      選擇困難症救星，讓命運幫你決定！
+    </p>
+
+    <label for="options">請輸入想吃的食物（每行一個）：</label>
+
+    <textarea id="options">便當
+麵
+咖哩
+水餃</textarea>
+
+    <button id="drawButton">🎲 幫我選！</button>
+
+    <section class="result-box">
+      <div class="result-title">✨ 今日命定美食 ✨</div>
+      <div id="result" aria-live="polite">等你來抽籤！</div>
+      <div id="message" role="alert"></div>
+    </section>
+
+    <p class="hint">
+      💡 可以自行修改清單，每個有效選項都有相同機率！
+    </p>
+  </main>
+
+  <script>
+    const optionsInput = document.getElementById("options");
+    const drawButton = document.getElementById("drawButton");
+    const result = document.getElementById("result");
+    const message = document.getElementById("message");
+
+    drawButton.addEventListener("click", function () {
+
+      // 取得輸入內容，依照換行分割
+      const options = optionsInput.value
+        .split(/\r?\n/)
+        .map(item => item.trim())
+        .filter(item => item !== "");
+
+      // 去除完全相同的重複選項
+      const uniqueOptions = [...new Set(options)];
+
+      // 檢查清單是否為空
+      if (uniqueOptions.length === 0) {
+        result.textContent = "🤔";
+        message.textContent = "請先輸入至少一個選項";
+        return;
+      }
+
+      // 隨機抽出一個選項
+      const randomIndex = Math.floor(
+        Math.random() * uniqueOptions.length
+      );
+
+      const selected = uniqueOptions[randomIndex];
+
+      // 顯示抽籤結果
+      result.textContent = selected;
+      message.textContent = "🎉 就決定吃這個了！";
+    });
+
+  </script>
+
+</body>
+</html>
